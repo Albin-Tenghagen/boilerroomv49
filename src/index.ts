@@ -1,48 +1,51 @@
-const itemsPerPage = 15;
-let currentPage = 1;
-let articleArray = [];
-let policeArticleArray = [];
+
+
+
+const itemsPerPage: number = 15;
+let currentPage: number = 1;
+let articleArray: Object[] = [];
+let policeArticleArray: Object[] = [];
 let intervalId = setInterval(() => {
   fetchApiResults();
 }, 1000 * 60 * 5);
 
 //*-------------------------------------------------------------------------
 //-----------------Header Creation------------------------------------------
-let headerContainer = document.createElement("header");
+let headerContainer = document.createElement("header") as HTMLHeadElement ;
 headerContainer.setAttribute("class", "headerContainer");
 document.body.appendChild(headerContainer);
 
-let headingHeader = document.createElement("h1");
+let headingHeader = document.createElement("h1") as HTMLHeadingElement;
 headingHeader.setAttribute("class", "headingHeader");
 headingHeader.innerText = "Welcome to the latest news";
 headerContainer.appendChild(headingHeader);
 
-let homeButton = document.createElement("button");
+let homeButton = document.createElement("button") as HTMLButtonElement;
 homeButton.setAttribute("class", "homeButton");
 homeButton.innerText = "Home";
 headerContainer.appendChild(homeButton);
 
-let techButton = document.createElement("button");
+let techButton = document.createElement("button") as HTMLButtonElement;
 techButton.setAttribute("class", "techButton");
 techButton.innerText = "Tech";
 headerContainer.appendChild(techButton);
 
-let appleButton = document.createElement("button");
+let appleButton = document.createElement("button") as HTMLButtonElement;
 appleButton.setAttribute("class", "appleButton");
 appleButton.innerText = "Apple";
 headerContainer.appendChild(appleButton);
 
-let teslaButton = document.createElement("button");
+let teslaButton = document.createElement("button") as HTMLButtonElement;
 teslaButton.setAttribute("class", "teslaButton");
 teslaButton.innerText = "Tesla";
 headerContainer.appendChild(teslaButton);
 
-let economyButton = document.createElement("button");
+let economyButton = document.createElement("button") as HTMLButtonElement;
 economyButton.setAttribute("class", "economyButton");
 economyButton.innerText = "Economy";
 headerContainer.appendChild(economyButton);
 
-let topHeadlinesButton = document.createElement("button");
+let topHeadlinesButton = document.createElement("button") as HTMLButtonElement;
 topHeadlinesButton.setAttribute("class", "topHeadlinesButton");
 topHeadlinesButton.innerText = "TopHeadlines";
 headerContainer.appendChild(topHeadlinesButton);
@@ -53,16 +56,16 @@ let newsContainer = document.createElement("main");
 newsContainer.setAttribute("class", "newsContainer");
 document.body.appendChild(newsContainer);
 
-let searchForm = document.createElement("form");
+let searchForm = document.createElement("form") as HTMLFormElement;
 searchForm.setAttribute("class", "searchForm");
 newsContainer.appendChild(searchForm);
 
-let searchNewsInput = document.createElement("input");
+let searchNewsInput = document.createElement("input") as HTMLInputElement;
 searchNewsInput.setAttribute("class", "searchNewsInput");
 searchNewsInput.setAttribute("placeholder", "Search articles");
 searchForm.appendChild(searchNewsInput);
 
-let searchNewsButton = document.createElement("button");
+let searchNewsButton = document.createElement("button") as HTMLButtonElement;
 searchNewsButton.setAttribute("class", "searchNewsButton");
 searchNewsButton.innerText = "Search";
 searchForm.appendChild(searchNewsButton);
@@ -94,7 +97,8 @@ const fetchApiResults = async (type = "all") => {
     // empties the article section everytime the function runs.
     articleSection.replaceChildren();
     articleSection2.replaceChildren();
-    let requests = [];
+    let requests: Object[] = [];
+    
     let url;
     //switch case to check which "type" runs.
     switch (type) {
@@ -106,7 +110,7 @@ const fetchApiResults = async (type = "all") => {
       case "all":
         requests = [
           fetch(
-            "https://newsapi.org/v2/top-headlines?country=us&language=en&apiKey=1006e9f332db40bd8553b27720785488"
+           "https://newsapi.org/v2/top-headlines?country=us&language=en&apiKey=1006e9f332db40bd8553b27720785488"
           ),
           fetch(
             "https://newsapi.org/v2/top-headlines?language=en&category=business&apiKey=1006e9f332db40bd8553b27720785488"
