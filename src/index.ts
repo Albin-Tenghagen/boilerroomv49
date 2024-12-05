@@ -1,11 +1,12 @@
 interface articleObject {
   title: string,
+  name: string,
   description: string,
   datetime: string,
   author: string
   url: string,
   urlToImage: string,
-  error?: Error,  
+  error?: error,  
   content?: string | undefined,
   publishedAt: string,
   summary: string,
@@ -13,6 +14,12 @@ interface articleObject {
 
 }                                                                       
 
+interface error {
+  name: string,
+  message: string,
+  status: number
+
+}
 
 const itemsPerPage: number = 15;
 let currentPage: number = 1;
@@ -102,6 +109,17 @@ newsContainer.appendChild(articleSection2);
 
 //--------------------------------------------------------------------------
 
+interface NewsApiData {
+  author: string,
+  title: string,
+  description: string,
+  url: string,
+  urlToImage: string,
+  publishedAt: string,
+  content: string,
+}
+
+
 //-----------------------------FETCH----------------------------------------
 // assigns the function with (type = "all") so that we can change this value for different results later.
 const fetchApiResults = async (type = "all") => {
@@ -116,7 +134,7 @@ const fetchApiResults = async (type = "all") => {
     switch (type) {
       case "topHeadlines":
         url =
-          "https://newsapi.org/v2/top-headlines?country=us&language=en&apiKey=1006e9f332db40bd8553b27720785488";
+          "https://newsasdaspi.org/v2/top-headlines?country=us&language=en&apiKey=1006e9f332db40bd8553b27720785488";
         break;
 
       case "all":
@@ -214,15 +232,18 @@ const fetchApiResults = async (type = "all") => {
 
       updatePagination();
     }
-  } catch (error) {
-    showError("An error occured: ", error.message);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      showError("An error occured: ",  error.message);
+    }  else {
     console.error("An error occured: ", error);
   }
+}
 };
 //------------------------Default News--------------------------------------
 window.addEventListener("DOMContentLoaded", async function () {
   await fetchApiResults("all");
-  document.querySelector(".searchNewsInput").value = ""   ;
+  (document.querySelector(".searchNewsInput") as HTMLInputElement) .value = "";
 });
 //--------------------------------------------------------------------------
 
@@ -231,42 +252,42 @@ window.addEventListener("DOMContentLoaded", async function () {
 homeButton.addEventListener("click", async function () {
   currentPage = 1;
   await fetchApiResults("all");
-  document.querySelector(".searchNewsInput").value = "";
+ (document.querySelector(".searchNewsInput") as HTMLInputElement) .value = "";
 });
 
 techButton.addEventListener("click", async function () {
   currentPage = 1;
-  document.querySelector(".section2Header").style.display = "none";
+  (document.querySelector(".section2Header") as HTMLHeadingElement)!.style.display = "none";
   await fetchApiResults("tech");
-  document.querySelector(".searchNewsInput").value = "";
+  (document.querySelector(".searchNewsInput") as HTMLInputElement) .value = "";
 });
 
 appleButton.addEventListener("click", async function () {
   currentPage = 1;
-  document.querySelector(".section2Header").style.display = "none";
+  document.querySelector<HTMLHeadingElement>(".section2Header")!.style.display = "none";
   await fetchApiResults("apple");
-  document.querySelector(".searchNewsInput").value = "";
+  (document.querySelector(".searchNewsInput") as HTMLInputElement) .value = "";
 });
 
 teslaButton.addEventListener("click", async function () {
   currentPage = 1;
-  document.querySelector(".section2Header").style.display = "none";
+  (document.querySelector(".section2Header") as HTMLHeadingElement)!.style.display = "none";
   await fetchApiResults("tesla");
-  document.querySelector(".searchNewsInput").value = "";
+  (document.querySelector(".searchNewsInput") as HTMLInputElement) .value = "";
 });
 
 economyButton.addEventListener("click", async function () {
   currentPage = 1;
-  document.querySelector(".section2Header").style.display = "none";
+  document.querySelector<HTMLHeadingElement>(".section2Header")!.style.display = "none";
   await fetchApiResults("economyCategory");
-  document.querySelector(".searchNewsInput").value = "";
+  (document.querySelector(".searchNewsInput") as HTMLInputElement) .value = "";
 });
 
 topHeadlinesButton.addEventListener("click", async function () {
-  currentPage = 1;
-  document.querySelector(".section2Header").style.display = "none";
+  currentPage = 1,
+  (document.querySelector(".section2Header") as HTMLHeadingElement)!.style.display = "none";
   await fetchApiResults("topHeadlines");
-  document.querySelector(".searchNewsInput").value = "";
+  (document.querySelector(".searchNewsInput") as HTMLInputElement).value = "";
 });
 
 //---------------------------------------------------------
@@ -285,12 +306,12 @@ searchForm.addEventListener("submit", function (event) {
   } else {
     console.log("input is not empty, yay!");
     searchForArticles(searchTerm);
-    document.querySelector(".searchNewsInput").value = "";
-    document.querySelector(".section2Header").style.display = "none";
+    (document.querySelector(".searchNewsInput") as HTMLInputElement).value = "";
+    (document.querySelector(".section2Header") as HTMLHeadingElement)!.style.display = "none";
   }
 });
 
-async function searchForArticles(query) {
+async function searchForArticles(query: string): Promise<void> {
   currentPage = 1;
   await fetchApiResults(query);
 }
@@ -298,7 +319,7 @@ async function searchForArticles(query) {
 
 //-------------------Paging Setup--------------------------
 
-function displayData(page) {
+function displayData(page: number): void{
   console.log(`Show data for page ${page}`);
 
   articleSection.innerHTML = "";
@@ -462,39 +483,47 @@ function createArticles2(article2: Article2): void {
 
 //------------------------------------------------------------
 function responseMessage(response: Response): void {
-  switch (response.status) {
-    case 400:
-      throw new Error(
-        "400: Bad Request: Your request could not be processed. Please check that all information is correct and try again."
-      );
-    case 401:
-      throw new Error(
-        "401: Unauthorized: You do not have the proper authorization to access this content."
-      );
-    case 403:
-      throw new Error(
-        "403: Forbidden access: You are not authorized to view this page. Contact the administrator if you believe this is a mistake."
-      );
-    case 404:
-      throw new Error(
-        "404: Resource not found: The page you were looking for could not be found. Check the address or use the search function."
-      );
-    case 429:
-      throw new Error(
-        "429: Too Many Requests: You have made too many requests in a short period. Please wait a moment and try again."
-      );
-    case 500:
-      throw new Error(
-        "500: Internal Server Error: Oops! An error occurred on the server. We're working to resolve the issue. Please try again later."
-      );
-    default:
-      throw new Error(`"HTTP error! Status: ${response.status}`);
+  const errorMessages: Record<number, string> = {
+    404: "test123"
   }
+
+  const message = errorMessages[response.status] || `Http error${response.status}`;
+  throw new Error(message);
+  // switch (response.status) {
+  //   case 400:
+  //     throw new Error(
+  //       "400: Bad Request: Your request could not be processed. Please check that all information is correct and try again."
+  //     );
+  //   case 401:
+  //     throw new Error(
+  //       "401: Unauthorized: You do not have the proper authorization to access this content."
+  //     );
+  //   case 403:
+  //     throw new Error(
+  //       "403: Forbidden access: You are not authorized to view this page. Contact the administrator if you believe this is a mistake."
+  //     );
+  //   case 404:
+  //     throw new Error(
+  //       "404: Resource not found: The page you were looking for could not be found. Check the address or use the search function."
+  //     );
+  //   case 429:
+  //     throw new Error(
+  //       "429: Too Many Requests: You have made too many requests in a short period. Please wait a moment and try again."
+  //     );
+  //   case 500:
+  //     throw new Error(
+  //       "500: Internal Server Error: Oops! An error occurred on the server. We're working to resolve the issue. Please try again later."
+  //     );
+  //   default:
+  //     throw new Error(`"HTTP error! Status: ${response.status}`);
+  //  }
 }
 
 //------------------------------------------------------------
 // spread operator which makes it possible to accept any number of arguments and collects them into an array.
-function showError(...messages: string[]): void {
+function showError(...messages:string[]): void {
+  console.log('The function was called')
+  // responseMessage(Response?)
   // Get the error container
   const errorContainer = document.getElementById("errorContainer")!;
 

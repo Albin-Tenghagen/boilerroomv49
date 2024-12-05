@@ -67,7 +67,6 @@ newsContainer.appendChild(section2Header);
 const articleSection2 = document.createElement("section");
 articleSection2.setAttribute("class", "articleSection2");
 newsContainer.appendChild(articleSection2);
-//--------------------------------------------------------------------------
 //-----------------------------FETCH----------------------------------------
 // assigns the function with (type = "all") so that we can change this value for different results later.
 const fetchApiResults = async (type = "all")=>{
@@ -81,7 +80,7 @@ const fetchApiResults = async (type = "all")=>{
         //switch case to check which "type" runs.
         switch(type){
             case "topHeadlines":
-                url = "https://newsapi.org/v2/top-headlines?country=us&language=en&apiKey=1006e9f332db40bd8553b27720785488";
+                url = "https://newsasdaspi.org/v2/top-headlines?country=us&language=en&apiKey=1006e9f332db40bd8553b27720785488";
                 break;
             case "all":
                 requests = [
@@ -136,14 +135,16 @@ const fetchApiResults = async (type = "all")=>{
         if (articleArray.length === 0) articleSection.innerHTML = "<p>No articles were found<p>";
         else {
             console.log("articleArray", articleArray);
-            // filters the array so that every "article.content ["Removed"] is filtered away.
-            articleArray = await articleArray.filter(// optional chaining operator with ? it returns undefined instead of an error. It checks if the value before it is null or undefined.
-            (article)=>article?.content?.toLowerCase() !== "[removed]");
+            //   // filters the array so that every "article.content ["Removed"] is filtered away.
+            // articleArray = articleArray.filter(
+            //   // optional chaining operator with ? it returns undefined instead of an error. It checks if the value before it is null or undefined.
+            //   (article) => article?.content?.toLowerCase() !== "[removed]"
+            // );
             updatePagination();
         }
     } catch (error) {
-        showError("An error occured: ", error.message);
-        console.error("An error occured: ", error);
+        if (error instanceof Error) showError("An error occured: ", error.message);
+        else console.error("An error occured: ", error);
     }
 };
 //------------------------Default News--------------------------------------
@@ -183,8 +184,7 @@ economyButton.addEventListener("click", async function() {
     document.querySelector(".searchNewsInput").value = "";
 });
 topHeadlinesButton.addEventListener("click", async function() {
-    currentPage = 1;
-    document.querySelector(".section2Header").style.display = "none";
+    currentPage = 1, document.querySelector(".section2Header").style.display = "none";
     await fetchApiResults("topHeadlines");
     document.querySelector(".searchNewsInput").value = "";
 });
@@ -263,8 +263,6 @@ function updatePagination() {
     //Sets up the pagination system every time it gets called to avoid double controls and/or other errors
     paginationSetup();
 }
-//---------------------------------------------------------
-//------------------Article Creation Function--------------
 function createArticles(article) {
     let articleContainer = document.createElement("article");
     articleContainer.setAttribute("class", "articleContainer");
@@ -303,8 +301,6 @@ function createArticles(article) {
     readMoreButton.href = article.url;
     articleContainer.appendChild(readMoreButton);
 }
-//------------------------------------------------------------
-//------------------Article2 Creation Function--------------
 function createArticles2(article2) {
     let articleContainer2 = document.createElement("article");
     articleContainer2.setAttribute("class", "articleContainer");
@@ -328,26 +324,45 @@ function createArticles2(article2) {
 }
 //------------------------------------------------------------
 function responseMessage(response) {
-    switch(response.status){
-        case 400:
-            throw new Error("400: Bad Request: Your request could not be processed. Please check that all information is correct and try again.");
-        case 401:
-            throw new Error("401: Unauthorized: You do not have the proper authorization to access this content.");
-        case 403:
-            throw new Error("403: Forbidden access: You are not authorized to view this page. Contact the administrator if you believe this is a mistake.");
-        case 404:
-            throw new Error("404: Resource not found: The page you were looking for could not be found. Check the address or use the search function.");
-        case 429:
-            throw new Error("429: Too Many Requests: You have made too many requests in a short period. Please wait a moment and try again.");
-        case 500:
-            throw new Error("500: Internal Server Error: Oops! An error occurred on the server. We're working to resolve the issue. Please try again later.");
-        default:
-            throw new Error(`"HTTP error! Status: ${response.status}`);
-    }
+    const errorMessages = {
+        404: "test123"
+    };
+    const message = errorMessages[response.status] || `Http error${response.status}`;
+    throw new Error(message);
+// switch (response.status) {
+//   case 400:
+//     throw new Error(
+//       "400: Bad Request: Your request could not be processed. Please check that all information is correct and try again."
+//     );
+//   case 401:
+//     throw new Error(
+//       "401: Unauthorized: You do not have the proper authorization to access this content."
+//     );
+//   case 403:
+//     throw new Error(
+//       "403: Forbidden access: You are not authorized to view this page. Contact the administrator if you believe this is a mistake."
+//     );
+//   case 404:
+//     throw new Error(
+//       "404: Resource not found: The page you were looking for could not be found. Check the address or use the search function."
+//     );
+//   case 429:
+//     throw new Error(
+//       "429: Too Many Requests: You have made too many requests in a short period. Please wait a moment and try again."
+//     );
+//   case 500:
+//     throw new Error(
+//       "500: Internal Server Error: Oops! An error occurred on the server. We're working to resolve the issue. Please try again later."
+//     );
+//   default:
+//     throw new Error(`"HTTP error! Status: ${response.status}`);
+//  }
 }
 //------------------------------------------------------------
 // spread operator which makes it possible to accept any number of arguments and collects them into an array.
 function showError(...messages) {
+    console.log('The function was called');
+    // responseMessage(Response?)
     // Get the error container
     const errorContainer = document.getElementById("errorContainer");
     // concatenates all elements of the array into a single string.
