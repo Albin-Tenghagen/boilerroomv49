@@ -80,19 +80,19 @@ const fetchApiResults = async (type = "all")=>{
         //switch case to check which "type" runs.
         switch(type){
             case "topHeadlines":
-                url = "https://newsasdaspi.org/v2/top-headlines?country=us&language=en&apiKey=1006e9f332db40bd8553b27720785488";
+                url = "https://newsapi.org/v2/top-headlines?country=us&language=en&apiKey=a5e3e0dc52244181a7517d579bb03bb";
                 break;
             case "all":
                 requests = [
-                    fetch("https://newsapi.org/v2/top-headlines?country=us&language=en&apiKey=1006e9f332db40bd8553b27720785488"),
-                    fetch("https://newsapi.org/v2/top-headlines?language=en&category=business&apiKey=1006e9f332db40bd8553b27720785488")
+                    fetch("https://newsapi.org/v2/top-headlines?country=us&language=en&apiKey=a5e3e0dc52244181a7517d579bb03bb5"),
+                    fetch("https://newsapi.org/v2/top-headlines?language=en&category=business&apiKey=a5e3e0dc52244181a7517d579bb03bb5")
                 ];
                 break;
             case "economyCategory":
-                url = "https://newsapi.org/v2/top-headlines?language=en&category=business&apiKey=1006e9f332db40bd8553b27720785488";
+                url = "https://newsapi.org/v2/top-headlines?language=en&category=business&apiKey=a5e3e0dc52244181a7517d579bb03bb5";
                 break;
             default:
-                url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(type)}&language=en&from=2024-11-15&sortBy=publishedAt&apiKey=1006e9f332db40bd8553b27720785488`;
+                url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(type)}&language=en&from=2024-11-15&sortBy=publishedAt&apiKey=a5e3e0dc52244181a7517d579bb03bb5`;
                 break;
         }
         // if we run the "all" type, then this will push a fetch api into the requests array.
@@ -324,44 +324,38 @@ function createArticles2(article2) {
 }
 //------------------------------------------------------------
 function responseMessage(response) {
-    const errorMessages = {
-        404: "test123"
-    };
-    const message = errorMessages[response.status] || `Http error${response.status}`;
-    throw new Error(message);
-// switch (response.status) {
-//   case 400:
-//     throw new Error(
-//       "400: Bad Request: Your request could not be processed. Please check that all information is correct and try again."
-//     );
-//   case 401:
-//     throw new Error(
-//       "401: Unauthorized: You do not have the proper authorization to access this content."
-//     );
-//   case 403:
-//     throw new Error(
-//       "403: Forbidden access: You are not authorized to view this page. Contact the administrator if you believe this is a mistake."
-//     );
-//   case 404:
-//     throw new Error(
-//       "404: Resource not found: The page you were looking for could not be found. Check the address or use the search function."
-//     );
-//   case 429:
-//     throw new Error(
-//       "429: Too Many Requests: You have made too many requests in a short period. Please wait a moment and try again."
-//     );
-//   case 500:
-//     throw new Error(
-//       "500: Internal Server Error: Oops! An error occurred on the server. We're working to resolve the issue. Please try again later."
-//     );
-//   default:
-//     throw new Error(`"HTTP error! Status: ${response.status}`);
-//  }
+    function handleError(message) {
+        console.error(message);
+        // showError(message);
+        throw new Error(message);
+    }
+    switch(response.status){
+        case 400:
+            handleError("400: Bad Request: Your request could not be processed. Please check that all information is correct and try again.");
+            break;
+        case 401:
+            handleError("401: Unauthorized: You do not have the proper authorization to access this content.");
+            break;
+        case 403:
+            handleError("403: Forbidden access: You are not authorized to view this page. Contact the administrator if you believe this is a mistake.");
+            break;
+        case 404:
+            handleError("404: Resource not found: The page you were looking for could not be found. Check the address or use the search function.");
+            break;
+        case 429:
+            handleError("429: Too Many Requests: You have made too many requests in a short period. Please wait a moment and try again.");
+            break;
+        case 500:
+            handleError("500: Internal Server Error: Oops! An error occurred on the server. We're working to resolve the issue. Please try again later.");
+            break;
+        default:
+            handleError(`HTTP error! Status: ${response.status}`);
+            break;
+    }
 }
 //------------------------------------------------------------
 // spread operator which makes it possible to accept any number of arguments and collects them into an array.
 function showError(...messages) {
-    console.log('The function was called');
     // responseMessage(Response?)
     // Get the error container
     const errorContainer = document.getElementById("errorContainer");
