@@ -1,10 +1,23 @@
+interface articleObject {
+  title: string,
+  description: string,
+  datetime: string,
+  author: string
+  url: string,
+  urlToImage: string,
+  error?: Error,  
+  content?: string | undefined,
+  publishedAt: string,
+  summary: string,
+  id: string,
 
+}                                                                       
 
 
 const itemsPerPage: number = 15;
 let currentPage: number = 1;
-let articleArray: Object[] = [];
-let policeArticleArray: Object[] = [];
+let articleArray: articleObject[] = [];
+let policeArticleArray: articleObject[] = [];
 let intervalId = setInterval(() => {
   fetchApiResults();
 }, 1000 * 60 * 5);
@@ -78,7 +91,7 @@ let articleSection = document.createElement("section");
 articleSection.setAttribute("class", "articleSection");
 newsContainer.appendChild(articleSection);
 
-const section2Header = document.createElement("h1");
+const section2Header = document.createElement("h1") as HTMLHeadingElement;
 section2Header.setAttribute("class", "section2Header");
 section2Header.innerText = "news from swedish police, Time to train your swedish!";
 newsContainer.appendChild(section2Header);
@@ -97,9 +110,8 @@ const fetchApiResults = async (type = "all") => {
     // empties the article section everytime the function runs.
     articleSection.replaceChildren();
     articleSection2.replaceChildren();
-    let requests: Object[] = [];
-    
-    let url;
+    let requests: Promise<Response>[] = [];
+    let url!: string;
     //switch case to check which "type" runs.
     switch (type) {
       case "topHeadlines":
@@ -159,6 +171,7 @@ const fetchApiResults = async (type = "all") => {
         policeResponse.json(),
       ]);
 
+
       // combines headlinesData.articles with economyData.articles into one array.
       articleArray = [...headlinesData.articles, ...economyData.articles];
       // separates the news from the police API into another array
@@ -190,11 +203,14 @@ const fetchApiResults = async (type = "all") => {
     } else {
       console.log("articleArray", articleArray);
 
-      // filters the array so that every "article.content ["Removed"] is filtered away.
-      articleArray = await articleArray.filter(
-        // optional chaining operator with ? it returns undefined instead of an error. It checks if the value before it is null or undefined.
-        (article) => article?.content?.toLowerCase() !== "[removed]"
-      );
+
+
+      //   // filters the array so that every "article.content ["Removed"] is filtered away.
+      // articleArray = articleArray.filter(
+      //   // optional chaining operator with ? it returns undefined instead of an error. It checks if the value before it is null or undefined.
+      
+      //   (article) => article?.content?.toLowerCase() !== "[removed]"
+      // );
 
       updatePagination();
     }
@@ -206,7 +222,7 @@ const fetchApiResults = async (type = "all") => {
 //------------------------Default News--------------------------------------
 window.addEventListener("DOMContentLoaded", async function () {
   await fetchApiResults("all");
-  document.querySelector(".searchNewsInput").value = "";
+  document.querySelector(".searchNewsInput").value = ""   ;
 });
 //--------------------------------------------------------------------------
 
@@ -281,6 +297,7 @@ async function searchForArticles(query) {
 //--------------------------------------------------------------------------
 
 //-------------------Paging Setup--------------------------
+
 function displayData(page) {
   console.log(`Show data for page ${page}`);
 
@@ -349,21 +366,31 @@ function updatePagination() {
 }
 //---------------------------------------------------------
 //------------------Article Creation Function--------------
-function createArticles(article) {
+type Article = {
+  title: string;
+  description: string;
+  datetime: string;
+  author: string;
+  url: string;
+  urlToImage: string;
+  publishedAt: string;
+}
+
+function createArticles(article: Article): void {
   let articleContainer = document.createElement("article");
   articleContainer.setAttribute("class", "articleContainer");
   articleSection.appendChild(articleContainer);
-
+  
   let articleTitle = document.createElement("h3");
   articleTitle.textContent = article.title;
   articleTitle.setAttribute("class", "articleTitle");
   articleContainer.appendChild(articleTitle);
-
+  
   let articleSummary = document.createElement("p");
   articleSummary.setAttribute("class", "articleSummary");
   articleSummary.textContent = article.description;
   articleContainer.appendChild(articleSummary);
-
+  
   let timeStamp = document.createElement("p");
   timeStamp.setAttribute("class", "timeStamp");
   // Format timestamp
@@ -372,23 +399,23 @@ function createArticles(article) {
   let formattedTimeStamp = `${dateAndTime[0]} ${dateAndTime[1]}`; // Places a blank space between date and time
   timeStamp.textContent = formattedTimeStamp;
   articleContainer.appendChild(timeStamp);
-
+  
   let articleAuthor = document.createElement("p");
   articleAuthor.setAttribute("class", "articleAuthor");
   articleAuthor.textContent = article.author;
   articleContainer.appendChild(articleAuthor);
-
+  
   let articleImage = document.createElement("img");
   articleImage.setAttribute("class", "articleImage");
-
+  
   article.urlToImage =
-    article.urlToImage === null
-      ? "https://placehold.co/600x400"
-      : article.urlToImage;
+  article.urlToImage === null
+  ? "https://placehold.co/600x400"
+  : article.urlToImage;
   articleImage.src = article.urlToImage;
   articleContainer.append(articleImage);
   //
-
+  
   //
   let readMoreButton = document.createElement("a");
   readMoreButton.textContent = "Read more";
@@ -400,16 +427,23 @@ function createArticles(article) {
 //------------------------------------------------------------
 //------------------Article2 Creation Function--------------
 
-function createArticles2(article2) {
+type Article2 = {
+  name: string;
+  summary: string;
+  datetime: string;
+  id: string;
+}
+
+function createArticles2(article2: Article2): void {
   let articleContainer2 = document.createElement("article");
   articleContainer2.setAttribute("class", "articleContainer");
   articleSection2.appendChild(articleContainer2);
-
+  
   let articleTitle2 = document.createElement("h3");
   articleTitle2.textContent = article2.name;
   articleTitle2.setAttribute("class", "articleTitle");
   articleContainer2.appendChild(articleTitle2);
-
+  
   let articleSummary2 = document.createElement("p");
   articleSummary2.setAttribute("class", "articleSummary");
   articleSummary2.textContent = article2.summary;
@@ -427,7 +461,7 @@ function createArticles2(article2) {
 }
 
 //------------------------------------------------------------
-function responseMessage(response) {
+function responseMessage(response: Response): void {
   switch (response.status) {
     case 400:
       throw new Error(
@@ -460,9 +494,9 @@ function responseMessage(response) {
 
 //------------------------------------------------------------
 // spread operator which makes it possible to accept any number of arguments and collects them into an array.
-function showError(...messages) {
+function showError(...messages: string[]): void {
   // Get the error container
-  const errorContainer = document.getElementById("errorContainer");
+  const errorContainer = document.getElementById("errorContainer")!;
 
   // concatenates all elements of the array into a single string.
   const fullMessage = messages.join("");
