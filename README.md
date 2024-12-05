@@ -1,0 +1,1 @@
+Typescripta skiten ur förra projektet!
