@@ -15,7 +15,7 @@ interface articleObject {
   url: string;
   urlToImage: string;
   error?: error;
-  content?: string | undefined;
+  content?: string | undefined; //TODO see if | undefined is neccesary
   publishedAt: string;
   summary: string;
   id: string;
@@ -38,15 +38,15 @@ type policeArticle = {
   id: string;
 };
 
-interface NewsApiData {
-  author: string;
-  title: string;
-  description: string;
-  url: string;
-  urlToImage: string;
-  publishedAt: string;
-  content: string;
-}
+// interface NewsApiData {
+//   author: string;
+//   title: string;
+//   description: string;
+//   url: string;
+//   urlToImage: string;
+//   publishedAt: string;
+//   content: string;
+// }
 interface error {
   name: string;
   message: string;
@@ -234,12 +234,11 @@ const fetchApiResults = async (type = "all") => {
     } else {
       console.log("articleArray", articleArray);
 
-      //   // filters the array so that every "article.content ["Removed"] is filtered away.
-      // articleArray = articleArray.filter(
-      //   // optional chaining operator with ? it returns undefined instead of an error. It checks if the value before it is null or undefined.
-
-      //   (article) => article?.content?.toLowerCase() !== "[removed]"
-      // );
+      // filters the array so that every "article.content ["Removed"] is filtered away.
+      //  optional chaining operator with ? it returns undefined instead of an error. It checks if the value before it is null or undefined.
+      articleArray = articleArray.filter(
+        (article) => article?.content?.toLowerCase() !== "[removed]"
+      );
 
       updatePagination();
     }
@@ -344,12 +343,12 @@ function displayData(page: number): void {
   console.log(`Show data for page ${page}`);
 
   articleSection.innerHTML = "";
-
-  const startingPage = (page - 1) * itemsPerPage;
-  console.log("starting page:", startingPage);
-  const endingPage = startingPage + itemsPerPage;
-  console.log("ending page:", endingPage);
-  const paginatedData = articleArray.slice(startingPage, endingPage);
+  //* Renamed startingPage and endingPage to be more situationsenligt
+  const startingArticle = (page - 1) * itemsPerPage;
+  console.log("starting page:", startingArticle);
+  const endingArticle = startingArticle + itemsPerPage;
+  console.log("ending page:", endingArticle);
+  const paginatedData = articleArray.slice(startingArticle, endingArticle);
   console.log("paginated data: ", paginatedData);
 
   paginatedData.forEach((article) => createArticles(article));

@@ -136,11 +136,9 @@ const fetchApiResults = async (type = "all")=>{
         if (articleArray.length === 0) articleSection.innerHTML = "<p>No articles were found<p>";
         else {
             console.log("articleArray", articleArray);
-            //   // filters the array so that every "article.content ["Removed"] is filtered away.
-            // articleArray = articleArray.filter(
-            //   // optional chaining operator with ? it returns undefined instead of an error. It checks if the value before it is null or undefined.
-            //   (article) => article?.content?.toLowerCase() !== "[removed]"
-            // );
+            // filters the array so that every "article.content ["Removed"] is filtered away.
+            //  optional chaining operator with ? it returns undefined instead of an error. It checks if the value before it is null or undefined.
+            articleArray = articleArray.filter((article)=>article?.content?.toLowerCase() !== "[removed]");
             updatePagination();
         }
     } catch (error) {
@@ -213,11 +211,12 @@ async function searchForArticles(query) {
 function displayData(page) {
     console.log(`Show data for page ${page}`);
     articleSection.innerHTML = "";
-    const startingPage = (page - 1) * itemsPerPage;
-    console.log("starting page:", startingPage);
-    const endingPage = startingPage + itemsPerPage;
-    console.log("ending page:", endingPage);
-    const paginatedData = articleArray.slice(startingPage, endingPage);
+    //* Renamed startingPage and endingPage to be more situationsenligt
+    const startingArticle = (page - 1) * itemsPerPage;
+    console.log("starting page:", startingArticle);
+    const endingArticle = startingArticle + itemsPerPage;
+    console.log("ending page:", endingArticle);
+    const paginatedData = articleArray.slice(startingArticle, endingArticle);
     console.log("paginated data: ", paginatedData);
     paginatedData.forEach((article)=>createArticles(article));
 }
