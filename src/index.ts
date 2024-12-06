@@ -1,24 +1,22 @@
 interface articleObject {
-  title: string,
-  name: string,
-  description: string,
-  datetime: string,
-  author: string
-  url: string,
-  urlToImage: string,
-  error?: error,  
-  content?: string | undefined,
-  publishedAt: string,
-  summary: string,
-  id: string,
-
-}                                                                       
+  title: string;
+  name: string;
+  description: string;
+  datetime: string;
+  author: string;
+  url: string;
+  urlToImage: string;
+  error?: error;
+  content?: string | undefined;
+  publishedAt: string;
+  summary: string;
+  id: string;
+}
 
 interface error {
-  name: string,
-  message: string,
-  status: number
-
+  name: string;
+  message: string;
+  status: number;
 }
 
 const itemsPerPage: number = 15;
@@ -31,7 +29,7 @@ let intervalId = setInterval(() => {
 
 //*-------------------------------------------------------------------------
 //-----------------Header Creation------------------------------------------
-let headerContainer = document.createElement("header") as HTMLHeadElement ;
+let headerContainer = document.createElement("header") as HTMLHeadElement;
 headerContainer.setAttribute("class", "headerContainer");
 document.body.appendChild(headerContainer);
 
@@ -100,7 +98,8 @@ newsContainer.appendChild(articleSection);
 
 const section2Header = document.createElement("h1") as HTMLHeadingElement;
 section2Header.setAttribute("class", "section2Header");
-section2Header.innerText = "news from swedish police, Time to train your swedish!";
+section2Header.innerText =
+  "news from swedish police, Time to train your swedish!";
 newsContainer.appendChild(section2Header);
 
 const articleSection2 = document.createElement("section");
@@ -110,15 +109,14 @@ newsContainer.appendChild(articleSection2);
 //--------------------------------------------------------------------------
 
 interface NewsApiData {
-  author: string,
-  title: string,
-  description: string,
-  url: string,
-  urlToImage: string,
-  publishedAt: string,
-  content: string,
+  author: string;
+  title: string;
+  description: string;
+  url: string;
+  urlToImage: string;
+  publishedAt: string;
+  content: string;
 }
-
 
 //-----------------------------FETCH----------------------------------------
 // assigns the function with (type = "all") so that we can change this value for different results later.
@@ -140,7 +138,7 @@ const fetchApiResults = async (type = "all") => {
       case "all":
         requests = [
           fetch(
-           "https://newsapi.org/v2/top-headlines?country=us&language=en&apiKey=a5e3e0dc52244181a7517d579bb03bb5"
+            "https://newsapi.org/v2/top-headlines?country=us&language=en&apiKey=a5e3e0dc52244181a7517d579bb03bb5"
           ),
           fetch(
             "https://newsapi.org/v2/top-headlines?language=en&category=business&apiKey=a5e3e0dc52244181a7517d579bb03bb5"
@@ -189,7 +187,6 @@ const fetchApiResults = async (type = "all") => {
         policeResponse.json(),
       ]);
 
-
       // combines headlinesData.articles with economyData.articles into one array.
       articleArray = [...headlinesData.articles, ...economyData.articles];
       // separates the news from the police API into another array
@@ -221,12 +218,10 @@ const fetchApiResults = async (type = "all") => {
     } else {
       console.log("articleArray", articleArray);
 
-
-
       //   // filters the array so that every "article.content ["Removed"] is filtered away.
       // articleArray = articleArray.filter(
       //   // optional chaining operator with ? it returns undefined instead of an error. It checks if the value before it is null or undefined.
-      
+
       //   (article) => article?.content?.toLowerCase() !== "[removed]"
       // );
 
@@ -234,16 +229,16 @@ const fetchApiResults = async (type = "all") => {
     }
   } catch (error: unknown) {
     if (error instanceof Error) {
-      showError("An error occured: ",  error.message);
-    }  else {
-    console.error("An error occured: ", error);
+      showError("An error occured: ", error.message);
+    } else {
+      console.error("An error occured: ", error);
+    }
   }
-}
 };
 //------------------------Default News--------------------------------------
 window.addEventListener("DOMContentLoaded", async function () {
   await fetchApiResults("all");
-  (document.querySelector(".searchNewsInput") as HTMLInputElement) .value = "";
+  (document.querySelector(".searchNewsInput") as HTMLInputElement).value = "";
 });
 //--------------------------------------------------------------------------
 
@@ -252,40 +247,48 @@ window.addEventListener("DOMContentLoaded", async function () {
 homeButton.addEventListener("click", async function () {
   currentPage = 1;
   await fetchApiResults("all");
- (document.querySelector(".searchNewsInput") as HTMLInputElement) .value = "";
+  (document.querySelector(".searchNewsInput") as HTMLInputElement).value = "";
 });
 
 techButton.addEventListener("click", async function () {
   currentPage = 1;
-  (document.querySelector(".section2Header") as HTMLHeadingElement)!.style.display = "none";
+  (document.querySelector(
+    ".section2Header"
+  ) as HTMLHeadingElement)!.style.display = "none";
   await fetchApiResults("tech");
-  (document.querySelector(".searchNewsInput") as HTMLInputElement) .value = "";
+  (document.querySelector(".searchNewsInput") as HTMLInputElement).value = "";
 });
 
 appleButton.addEventListener("click", async function () {
   currentPage = 1;
-  document.querySelector<HTMLHeadingElement>(".section2Header")!.style.display = "none";
+  document.querySelector<HTMLHeadingElement>(".section2Header")!.style.display =
+    "none";
   await fetchApiResults("apple");
-  (document.querySelector(".searchNewsInput") as HTMLInputElement) .value = "";
+  (document.querySelector(".searchNewsInput") as HTMLInputElement).value = "";
 });
 
 teslaButton.addEventListener("click", async function () {
   currentPage = 1;
-  (document.querySelector(".section2Header") as HTMLHeadingElement)!.style.display = "none";
+  (document.querySelector(
+    ".section2Header"
+  ) as HTMLHeadingElement)!.style.display = "none";
   await fetchApiResults("tesla");
-  (document.querySelector(".searchNewsInput") as HTMLInputElement) .value = "";
+  (document.querySelector(".searchNewsInput") as HTMLInputElement).value = "";
 });
 
 economyButton.addEventListener("click", async function () {
   currentPage = 1;
-  document.querySelector<HTMLHeadingElement>(".section2Header")!.style.display = "none";
+  document.querySelector<HTMLHeadingElement>(".section2Header")!.style.display =
+    "none";
   await fetchApiResults("economyCategory");
-  (document.querySelector(".searchNewsInput") as HTMLInputElement) .value = "";
+  (document.querySelector(".searchNewsInput") as HTMLInputElement).value = "";
 });
 
 topHeadlinesButton.addEventListener("click", async function () {
-  currentPage = 1,
-  (document.querySelector(".section2Header") as HTMLHeadingElement)!.style.display = "none";
+  (currentPage = 1),
+    ((document.querySelector(
+      ".section2Header"
+    ) as HTMLHeadingElement)!.style.display = "none");
   await fetchApiResults("topHeadlines");
   (document.querySelector(".searchNewsInput") as HTMLInputElement).value = "";
 });
@@ -307,7 +310,9 @@ searchForm.addEventListener("submit", function (event) {
     console.log("input is not empty, yay!");
     searchForArticles(searchTerm);
     (document.querySelector(".searchNewsInput") as HTMLInputElement).value = "";
-    (document.querySelector(".section2Header") as HTMLHeadingElement)!.style.display = "none";
+    (document.querySelector(
+      ".section2Header"
+    ) as HTMLHeadingElement)!.style.display = "none";
   }
 });
 
@@ -319,7 +324,7 @@ async function searchForArticles(query: string): Promise<void> {
 
 //-------------------Paging Setup--------------------------
 
-function displayData(page: number): void{
+function displayData(page: number): void {
   console.log(`Show data for page ${page}`);
 
   articleSection.innerHTML = "";
@@ -395,23 +400,23 @@ type Article = {
   url: string;
   urlToImage: string;
   publishedAt: string;
-}
+};
 
 function createArticles(article: Article): void {
   let articleContainer = document.createElement("article");
   articleContainer.setAttribute("class", "articleContainer");
   articleSection.appendChild(articleContainer);
-  
+
   let articleTitle = document.createElement("h3");
   articleTitle.textContent = article.title;
   articleTitle.setAttribute("class", "articleTitle");
   articleContainer.appendChild(articleTitle);
-  
+
   let articleSummary = document.createElement("p");
   articleSummary.setAttribute("class", "articleSummary");
   articleSummary.textContent = article.description;
   articleContainer.appendChild(articleSummary);
-  
+
   let timeStamp = document.createElement("p");
   timeStamp.setAttribute("class", "timeStamp");
   // Format timestamp
@@ -420,23 +425,23 @@ function createArticles(article: Article): void {
   let formattedTimeStamp = `${dateAndTime[0]} ${dateAndTime[1]}`; // Places a blank space between date and time
   timeStamp.textContent = formattedTimeStamp;
   articleContainer.appendChild(timeStamp);
-  
+
   let articleAuthor = document.createElement("p");
   articleAuthor.setAttribute("class", "articleAuthor");
   articleAuthor.textContent = article.author;
   articleContainer.appendChild(articleAuthor);
-  
+
   let articleImage = document.createElement("img");
   articleImage.setAttribute("class", "articleImage");
-  
+
   article.urlToImage =
-  article.urlToImage === null
-  ? "https://placehold.co/600x400"
-  : article.urlToImage;
+    article.urlToImage === null
+      ? "https://placehold.co/600x400"
+      : article.urlToImage;
   articleImage.src = article.urlToImage;
   articleContainer.append(articleImage);
   //
-  
+
   //
   let readMoreButton = document.createElement("a");
   readMoreButton.textContent = "Read more";
@@ -453,18 +458,18 @@ type Article2 = {
   summary: string;
   datetime: string;
   id: string;
-}
+};
 
 function createArticles2(article2: Article2): void {
   let articleContainer2 = document.createElement("article");
   articleContainer2.setAttribute("class", "articleContainer");
   articleSection2.appendChild(articleContainer2);
-  
+
   let articleTitle2 = document.createElement("h3");
   articleTitle2.textContent = article2.name;
   articleTitle2.setAttribute("class", "articleTitle");
   articleContainer2.appendChild(articleTitle2);
-  
+
   let articleSummary2 = document.createElement("p");
   articleSummary2.setAttribute("class", "articleSummary");
   articleSummary2.textContent = article2.summary;
@@ -484,28 +489,40 @@ function createArticles2(article2: Article2): void {
 //------------------------------------------------------------
 function responseMessage(response: Response): void {
   function handleError(message: string): void {
-    console.error(message); 
+    console.error(message);
     // showError(message);
     throw new Error(message);
   }
   switch (response.status) {
     case 400:
-      handleError("400: Bad Request: Your request could not be processed. Please check that all information is correct and try again.");
+      handleError(
+        "400: Bad Request: Your request could not be processed. Please check that all information is correct and try again."
+      );
       break;
     case 401:
-      handleError("401: Unauthorized: You do not have the proper authorization to access this content.");
+      handleError(
+        "401: Unauthorized: You do not have the proper authorization to access this content."
+      );
       break;
     case 403:
-      handleError("403: Forbidden access: You are not authorized to view this page. Contact the administrator if you believe this is a mistake.");
+      handleError(
+        "403: Forbidden access: You are not authorized to view this page. Contact the administrator if you believe this is a mistake."
+      );
       break;
     case 404:
-      handleError("404: Resource not found: The page you were looking for could not be found. Check the address or use the search function.");
+      handleError(
+        "404: Resource not found: The page you were looking for could not be found. Check the address or use the search function."
+      );
       break;
     case 429:
-      handleError("429: Too Many Requests: You have made too many requests in a short period. Please wait a moment and try again.");
+      handleError(
+        "429: Too Many Requests: You have made too many requests in a short period. Please wait a moment and try again."
+      );
       break;
     case 500:
-      handleError("500: Internal Server Error: Oops! An error occurred on the server. We're working to resolve the issue. Please try again later.");
+      handleError(
+        "500: Internal Server Error: Oops! An error occurred on the server. We're working to resolve the issue. Please try again later."
+      );
       break;
     default:
       handleError(`HTTP error! Status: ${response.status}`);
@@ -513,10 +530,9 @@ function responseMessage(response: Response): void {
   }
 }
 
-
 //------------------------------------------------------------
 // spread operator which makes it possible to accept any number of arguments and collects them into an array.
-function showError(...messages:string[]): void {
+function showError(...messages: string[]): void {
   // responseMessage(Response?)
   // Get the error container
   const errorContainer = document.getElementById("errorContainer")!;
