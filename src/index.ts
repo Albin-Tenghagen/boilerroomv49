@@ -13,6 +13,32 @@ interface articleObject {
   id: string;
 }
 
+type Article = {
+  title: string;
+  description: string;
+  datetime: string;
+  author: string;
+  url: string;
+  urlToImage: string;
+  publishedAt: string;
+};
+
+type policeArticle = {
+  name: string;
+  summary: string;
+  datetime: string;
+  id: string;
+};
+
+interface NewsApiData {
+  author: string;
+  title: string;
+  description: string;
+  url: string;
+  urlToImage: string;
+  publishedAt: string;
+  content: string;
+}
 interface error {
   name: string;
   message: string;
@@ -107,16 +133,6 @@ articleSection2.setAttribute("class", "articleSection2");
 newsContainer.appendChild(articleSection2);
 
 //--------------------------------------------------------------------------
-
-interface NewsApiData {
-  author: string;
-  title: string;
-  description: string;
-  url: string;
-  urlToImage: string;
-  publishedAt: string;
-  content: string;
-}
 
 //-----------------------------FETCH----------------------------------------
 // assigns the function with (type = "all") so that we can change this value for different results later.
@@ -392,16 +408,6 @@ function updatePagination() {
 }
 //---------------------------------------------------------
 //------------------Article Creation Function--------------
-type Article = {
-  title: string;
-  description: string;
-  datetime: string;
-  author: string;
-  url: string;
-  urlToImage: string;
-  publishedAt: string;
-};
-
 function createArticles(article: Article): void {
   let articleContainer = document.createElement("article");
   articleContainer.setAttribute("class", "articleContainer");
@@ -453,14 +459,7 @@ function createArticles(article: Article): void {
 //------------------------------------------------------------
 //------------------Article2 Creation Function--------------
 
-type Article2 = {
-  name: string;
-  summary: string;
-  datetime: string;
-  id: string;
-};
-
-function createArticles2(article2: Article2): void {
+function createArticles2(article2: policeArticle): void {
   let articleContainer2 = document.createElement("article");
   articleContainer2.setAttribute("class", "articleContainer");
   articleSection2.appendChild(articleContainer2);

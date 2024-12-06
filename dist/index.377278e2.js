@@ -67,6 +67,7 @@ newsContainer.appendChild(section2Header);
 const articleSection2 = document.createElement("section");
 articleSection2.setAttribute("class", "articleSection2");
 newsContainer.appendChild(articleSection2);
+//--------------------------------------------------------------------------
 //-----------------------------FETCH----------------------------------------
 // assigns the function with (type = "all") so that we can change this value for different results later.
 const fetchApiResults = async (type = "all")=>{
@@ -263,6 +264,8 @@ function updatePagination() {
     //Sets up the pagination system every time it gets called to avoid double controls and/or other errors
     paginationSetup();
 }
+//---------------------------------------------------------
+//------------------Article Creation Function--------------
 function createArticles(article) {
     let articleContainer = document.createElement("article");
     articleContainer.setAttribute("class", "articleContainer");
@@ -301,6 +304,8 @@ function createArticles(article) {
     readMoreButton.href = article.url;
     articleContainer.appendChild(readMoreButton);
 }
+//------------------------------------------------------------
+//------------------Article2 Creation Function--------------
 function createArticles2(article2) {
     let articleContainer2 = document.createElement("article");
     articleContainer2.setAttribute("class", "articleContainer");
