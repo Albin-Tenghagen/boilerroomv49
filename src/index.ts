@@ -1,3 +1,11 @@
+const itemsPerPage: number = 15;
+let currentPage: number = 1;
+let articleArray: articleObject[] = [];
+let policeArticleArray: articleObject[] = [];
+let intervalId = setInterval(() => {
+  fetchApiResults();
+}, 1000 * 60 * 5);
+
 interface articleObject {
   title: string;
   name: string;
@@ -44,14 +52,6 @@ interface error {
   message: string;
   status: number;
 }
-
-const itemsPerPage: number = 15;
-let currentPage: number = 1;
-let articleArray: articleObject[] = [];
-let policeArticleArray: articleObject[] = [];
-let intervalId = setInterval(() => {
-  fetchApiResults();
-}, 1000 * 60 * 5);
 
 //*-------------------------------------------------------------------------
 //-----------------Header Creation------------------------------------------
