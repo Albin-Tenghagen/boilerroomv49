@@ -148,7 +148,7 @@ const fetchApiResults = async (type = "all") => {
     switch (type) {
       case "topHeadlines":
         url =
-          "https://newsapi.org/v2/top-headlines?country=us&language=en&apiKey=a5e3e0dc52244181a7517d579bb03bb";
+          "https://newsapi.org/v2/top-headlines?country=us&language=en&apiKey=a5e3e0dc52244181a7517d579bb03bb5";
         break;
 
       case "all":

@@ -67,6 +67,7 @@ newsContainer.appendChild(section2Header);
 const articleSection2 = document.createElement("section");
 articleSection2.setAttribute("class", "articleSection2");
 newsContainer.appendChild(articleSection2);
+//--------------------------------------------------------------------------
 //-----------------------------FETCH----------------------------------------
 // assigns the function with (type = "all") so that we can change this value for different results later.
 const fetchApiResults = async (type = "all")=>{
@@ -80,7 +81,7 @@ const fetchApiResults = async (type = "all")=>{
         //switch case to check which "type" runs.
         switch(type){
             case "topHeadlines":
-                url = "https://newsapi.org/v2/top-headlines?country=us&language=en&apiKey=a5e3e0dc52244181a7517d579bb03bb";
+                url = "https://newsapi.org/v2/top-headlines?country=us&language=en&apiKey=a5e3e0dc52244181a7517d579bb03bb5";
                 break;
             case "all":
                 requests = [
@@ -135,11 +136,9 @@ const fetchApiResults = async (type = "all")=>{
         if (articleArray.length === 0) articleSection.innerHTML = "<p>No articles were found<p>";
         else {
             console.log("articleArray", articleArray);
-            //   // filters the array so that every "article.content ["Removed"] is filtered away.
-            // articleArray = articleArray.filter(
-            //   // optional chaining operator with ? it returns undefined instead of an error. It checks if the value before it is null or undefined.
-            //   (article) => article?.content?.toLowerCase() !== "[removed]"
-            // );
+            // filters the array so that every "article.content ["Removed"] is filtered away.
+            //  optional chaining operator with ? it returns undefined instead of an error. It checks if the value before it is null or undefined.
+            articleArray = articleArray.filter((article)=>article?.content?.toLowerCase() !== "[removed]");
             updatePagination();
         }
     } catch (error) {
@@ -212,11 +211,12 @@ async function searchForArticles(query) {
 function displayData(page) {
     console.log(`Show data for page ${page}`);
     articleSection.innerHTML = "";
-    const startingPage = (page - 1) * itemsPerPage;
-    console.log("starting page:", startingPage);
-    const endingPage = startingPage + itemsPerPage;
-    console.log("ending page:", endingPage);
-    const paginatedData = articleArray.slice(startingPage, endingPage);
+    //* Renamed startingPage and endingPage to be more situationsenligt
+    const startingArticle = (page - 1) * itemsPerPage;
+    console.log("starting page:", startingArticle);
+    const endingArticle = startingArticle + itemsPerPage;
+    console.log("ending page:", endingArticle);
+    const paginatedData = articleArray.slice(startingArticle, endingArticle);
     console.log("paginated data: ", paginatedData);
     paginatedData.forEach((article)=>createArticles(article));
 }
@@ -263,6 +263,8 @@ function updatePagination() {
     //Sets up the pagination system every time it gets called to avoid double controls and/or other errors
     paginationSetup();
 }
+//---------------------------------------------------------
+//------------------Article Creation Function--------------
 function createArticles(article) {
     let articleContainer = document.createElement("article");
     articleContainer.setAttribute("class", "articleContainer");
@@ -301,6 +303,8 @@ function createArticles(article) {
     readMoreButton.href = article.url;
     articleContainer.appendChild(readMoreButton);
 }
+//------------------------------------------------------------
+//------------------Article2 Creation Function--------------
 function createArticles2(article2) {
     let articleContainer2 = document.createElement("article");
     articleContainer2.setAttribute("class", "articleContainer");
